@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Evently</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Add Google Fonts for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Montserrat:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            /* Use a theatre/event background image */
+            background-image: url('https://images.unsplash.com/photo-1677536849474-2819061389ed?q=80&w=1175&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+            background-color: #222; /* fallback color */
+        }
+
+        @keyframes fadeBodyIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="font-family: 'Montserrat', sans-serif; font-size: 2.2rem; margin: 0;">
+            <i class="fa-solid fa-calendar-days"></i> Evently
+        </h1>
+        <button id="switch-mode-btn" style="padding:7px 14px;font-size:15px;border-radius:20px;background:linear-gradient(90deg,#e53935 60%,#ff5252 100%);font-weight:600;box-shadow:0 2px 8px rgba(200,30,60,0.10);border:1.5px solid #e53935;position:relative;top:0;right:0;">
+            <i class="fa-solid fa-user-shield"></i> Admin
+        </button>
+    </header>
+    <!-- Hero Section -->
+    <section class="stock-photo-bg" style="padding: 60px 0 40px 0; text-align: center; margin-bottom: 0;">
+        <div style="background: rgba(255,255,255,0.85); display: inline-block; padding: 32px 48px; border-radius: 18px; box-shadow: 0 8px 32px rgba(44,62,80,0.18);">
+            <h1 style="font-family: 'Montserrat', sans-serif; font-size: 3rem; color: #b71c1c; margin-bottom: 12px;">
+                <i class="fa-solid fa-calendar-days"></i> Evently
+            </h1>
+            <p style="font-size: 1.35rem; color: #b71c1c; margin-bottom: 18px;">
+                Discover, book, and manage your favorite events with style.<br>
+                <span style="color:#e53935;">Seamless seat selection. Instant booking. Beautiful experiences.</span>
+            </p>
+        </div>
+    </section>
+    <main style="animation:fadeBodyIn 0.8s;">
+        <section id="user-mode">
+            <h2>
+                <i class="fa-solid fa-bolt"></i> Upcoming Events
+            </h2>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <input type="text" id="user-search-input" placeholder="Search by name or venue">
+                <button id="user-search-button"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+            </div>
+            <!-- Event cards will be injected here by JS -->
+            <div id="user-event-list" style="margin-top:18px;"></div>
+        </section>
+
+        <section id="admin-mode" style="display: none;">
+            <h2>
+                <i class="fa-solid fa-gauge-high"></i> Admin Dashboard
+            </h2>
+            <div id="admin-analytics"></div>
+            <div id="admin-controls">
+                <h3>
+                    <i class="fa-solid fa-plus"></i> Create New Event
+                </h3>
+                <form id="create-event-form">
+                    <input type="text" id="event-name" placeholder="Name" required>
+                    <input type="text" id="event-venue" placeholder="Venue" required>
+                    <input type="datetime-local" id="event-start-time" required>
+                    <input type="number" id="event-capacity" placeholder="Capacity" required>
+                    <button type="submit"><i class="fa-solid fa-check"></i> Create Event</button>
+                </form>
+                <h3>
+                    <i class="fa-solid fa-list"></i> Existing Events
+                </h3>
+            </div>
+            <!-- Admin event cards will be injected here by JS -->
+            <div id="admin-event-list" style="margin-top:18px;"></div>
+        </section>
+
+        <div id="seat-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>
+                    <i class="fa-solid fa-chair"></i> Select Your Seat for <span id="modal-event-name"></span>
+                </h2>
+                <div id="seat-grid"></div>
+                <button id="confirm-seat-booking-btn" style="display: none;">
+                    <i class="fa-solid fa-ticket"></i> Confirm Booking
+                </button>
+            </div>
+        </div>
+
+        <!-- Floating Action Button for scroll-to-top -->
+        <button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to Top">
+            <i class="fa-solid fa-arrow-up"></i>
+        </button>
+
+        <!-- Footer for branding -->
+        <footer style="text-align:center; padding:32px 0 16px 0; color:#34495e; font-size:1.1rem;">
+            <span>
+                <i class="fa-solid fa-heart" style="color:#e74c3c;"></i>
+                Thank you for visiting &copy; 2025
+            </span>
+        </footer>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
