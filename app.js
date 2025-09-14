@@ -7,7 +7,7 @@ let isAdmin = false;
 let selectedEventId = null;
 let selectedSeatNumbers = [];
 
-// --- Modal Elements ---
+// --- Element References (Moved to top for clarity) ---
 const seatModal = document.getElementById('seat-modal');
 const closeModalButton = document.querySelector('.close-button');
 const modalEventName = document.getElementById('modal-event-name');
@@ -76,7 +76,7 @@ function showAdminMode() {
 
 function openSeatModal(eventId, eventName) {
     selectedEventId = eventId;
-    selectedSeatNumbers = []; // Corrected: This is now an array for multiple seats
+    selectedSeatNumbers = [];
     modalEventName.textContent = eventName;
     confirmSeatBookingBtn.style.display = 'none';
     fetchAndRenderSeats(eventId);
@@ -243,12 +243,11 @@ function createEvent(eventData) {
 }
 
 // --- Event Listeners ---
-
+// Moved to the bottom to ensure all elements are in the DOM
 document.getElementById('user-search-button').addEventListener('click', () => {
     const searchTerm = document.getElementById('user-search-input').value;
     fetchEvents(searchTerm);
 });
-
 
 document.getElementById('create-event-form').addEventListener('submit', (e) => {
     e.preventDefault();
