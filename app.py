@@ -464,7 +464,11 @@ def create_event_secure():
         return {"error": "Unauthorized"}, 401
     
     # The rest of your existing create_event code goes here...
+from flask import Flask, render_template
 
+@app.route('/')
+def home():
+    return render_template('index.html')
 # This runs the app on your computer
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))  # default to 10000 for your service

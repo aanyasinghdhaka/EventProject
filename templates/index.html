@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Evently</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+
     <!-- Add Google Fonts for a modern look -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Montserrat:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <!-- Add Font Awesome for icons -->
@@ -110,6 +112,5 @@
         </footer>
     </main>
 
-    <script src="app.js"></script>
 </body>
 </html>
