@@ -1,12 +1,11 @@
+const userBackendUrl = "https://asd-evently-backend.onrender.com/events";
+const adminBackendUrl = "https://asd-evently-backend.onrender.com/admin";
+const bookingUrl = "https://asd-evently-backend.onrender.com/bookings";
 const userId = 1;
-const backendBase = "https://asd-evently-backend.onrender.com";
-const userBackendUrl = `${backendBase}/events`;
-const adminBackendUrl = `${backendBase}/admin`;
-const bookingUrl = `${backendBase}/bookings`;
 
 let isAdmin = false;
 let selectedEventId = null;
-let selectedSeatNumbers = []; // Corrected: This is now an array for multiple seats
+let selectedSeatNumbers = [];
 
 // --- Modal Elements ---
 const seatModal = document.getElementById('seat-modal');
@@ -14,6 +13,7 @@ const closeModalButton = document.querySelector('.close-button');
 const modalEventName = document.getElementById('modal-event-name');
 const seatGrid = document.getElementById('seat-grid');
 const confirmSeatBookingBtn = document.getElementById('confirm-seat-booking-btn');
+const switchModeBtn = document.getElementById('switch-mode-btn');
 
 // --- Rendering Functions ---
 
@@ -59,7 +59,7 @@ function renderAdminView(events, analytics) {
 function showUserMode() {
     document.getElementById('user-mode').style.display = 'block';
     document.getElementById('admin-mode').style.display = 'none';
-    document.getElementById('switch-mode-btn').textContent = 'Switch to Admin Mode';
+    switchModeBtn.textContent = 'Switch to Admin Mode';
     isAdmin = false;
     fetchEvents();
 }
@@ -67,7 +67,7 @@ function showUserMode() {
 function showAdminMode() {
     document.getElementById('user-mode').style.display = 'none';
     document.getElementById('admin-mode').style.display = 'block';
-    document.getElementById('switch-mode-btn').textContent = 'Switch to User Mode';
+    switchModeBtn.textContent = 'Switch to User Mode';
     isAdmin = true;
     fetchAdminData();
 }
@@ -118,16 +118,13 @@ function fetchAndRenderSeats(eventId) {
 
 function selectSeat(seatNumber, seatElement) {
     if (seatElement.classList.contains('selected')) {
-        // Deselect seat
         seatElement.classList.remove('selected');
         selectedSeatNumbers = selectedSeatNumbers.filter(s => s !== seatNumber);
     } else {
-        // Select seat
         seatElement.classList.add('selected');
         selectedSeatNumbers.push(seatNumber);
     }
     
-    // Show/hide confirm button based on selection
     if (selectedSeatNumbers.length > 0) {
         confirmSeatBookingBtn.style.display = 'block';
     } else {
@@ -172,15 +169,15 @@ function bookSelectedSeats() {
         body: JSON.stringify({
             user_id: userId,
             event_id: selectedEventId,
-            seat_numbers: selectedSeatNumbers // Send the array of seats
+            seat_numbers: selectedSeatNumbers
         }),
     })
     .then(response => response.json())
     .then(data => {
         alert(data.message || data.error);
-        closeSeatModal(); // Close modal after booking attempt
-        fetchEvents(); // Refresh event list
-        if (isAdmin) fetchAdminData(); // Refresh admin view if in admin mode
+        closeSeatModal();
+        fetchEvents();
+        if (isAdmin) fetchAdminData();
     })
     .catch(error => {
         console.error("Error booking seats:", error);
@@ -227,8 +224,23 @@ function generateSeats(eventId) {
     }
 }
 
-
-
+function createEvent(eventData) {
+    fetch(`${adminBackendUrl}/events`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(eventData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message || data.error);
+        document.getElementById('create-event-form').reset();
+        fetchAdminData();
+    })
+    .catch(error => {
+        console.error("Error creating event:", error);
+        alert("Failed to create event.");
+    });
+}
 
 // --- Event Listeners ---
 
@@ -245,26 +257,13 @@ document.getElementById('create-event-form').addEventListener('submit', (e) => {
     const startTime = document.getElementById('event-start-time').value;
     const capacity = document.getElementById('event-capacity').value;
 
-    fetch(`${adminBackendUrl}/events`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            name,
-            venue,
-            start_time: startTime + ":00Z",
-            total_capacity: parseInt(capacity)
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message || data.error);
-        document.getElementById('create-event-form').reset();
-        fetchAdminData();
-    })
-    .catch(error => {
-        console.error("Error creating event:", error);
-        alert("Failed to create event.");
-    });
+    const eventData = {
+        name,
+        venue,
+        start_time: startTime + ":00Z",
+        total_capacity: parseInt(capacity)
+    };
+    createEvent(eventData);
 });
 
 closeModalButton.addEventListener('click', closeSeatModal);
@@ -280,12 +279,7 @@ document.getElementById('switch-mode-btn').addEventListener('click', () => {
     if (isAdmin) {
         showUserMode();
     } else {
-        const password = prompt("Enter admin password:");
-        if (password === "eventlyadmin") {
-            showAdminMode();
-        } else if (password !== null) {
-            alert("Incorrect password.");
-        }
+        showAdminMode();
     }
 });
 
