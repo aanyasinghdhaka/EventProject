@@ -189,6 +189,33 @@ function bookSelectedSeats() {
     });
 }
 
+async function askForAdminPassword() {
+    const password = prompt("Please enter the admin password:");
+    if (!password) {
+        return; // User canceled the prompt
+    }
+
+    try {
+        const response = await fetch(`${adminBackendUrl}/verify_password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            showAdminMode();
+        } else {
+            alert("Incorrect password. Access denied.");
+        }
+    } catch (error) {
+        console.error("Error verifying password:", error);
+        alert("Failed to connect to the server for password verification.");
+    }
+}
+
+
 function deleteEvent(eventId) {
     const confirmed = confirm("Are you sure you want to delete this event?");
     if (confirmed) {
@@ -246,6 +273,20 @@ function createEvent(eventData) {
     });
 }
 
+// Add this new function
+function askForAdminPassword() {
+    const password = prompt("Please enter the admin password:");
+    // For simplicity, use a hardcoded password. For a real app, you would
+    // send this to the backend for verification.
+    const correctPassword = "eventlyadmin";
+
+    if (password === correctPassword) {
+        showAdminMode();
+    } else {
+        alert("Incorrect password. Access denied.");
+    }
+}
+
 // --- Event Listeners ---
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -287,14 +328,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     confirmSeatBookingBtn.addEventListener('click', bookSelectedSeats);
+    
 
     switchModeBtn.addEventListener('click', () => {
         if (isAdmin) {
             showUserMode();
         } else {
-            showAdminMode();
+            // Call the new function instead of switching directly
+            askForAdminPassword(); 
         }
     });
+    
 
     // Initial load call
     showUserMode();

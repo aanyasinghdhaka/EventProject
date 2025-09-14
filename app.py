@@ -413,6 +413,20 @@ def create_user():
 def home():
     return render_template('index.html')
 
+# Add this new route for password verification
+@app.route('/admin/verify_password', methods=['POST'])
+def verify_password():
+    data = request.get_json()
+    password = data.get('password')
+
+    # IMPORTANT: Replace 'adminpassword123' with a securely hashed password
+    # in a real application, for example, using bcrypt.
+    correct_password = "adminpassword123"
+
+    if password == correct_password:
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False, "error": "Incorrect password"}), 401
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
