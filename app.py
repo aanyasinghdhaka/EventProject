@@ -5,22 +5,27 @@ from flask_cors import CORS
 # This creates your web app
 app = Flask(__name__)
 CORS(app) # 
+import os
 
-DB_HOST = "localhost"
-DB_NAME = "evently"
-DB_USER = "evently_user"
-DB_PASS = "evently_password"
 
-# This is a function that connects to your database
 def get_db_connection():
-    conn = psycopg2.connect(
-        host=DB_HOST,
-        database=DB_NAME,
-        user=DB_USER,
-        password=DB_PASS,
-        port=5432  # Default PostgreSQL port
-    )
-    return conn
+    # Render provides a single DATABASE_URL environment variable.
+    # We'll check for that first, as it's the standard for Render.
+    database_url = os.environ.get("DATABASE_URL")
+    
+    if database_url:
+        # Use the single URL for the deployed app
+        return psycopg2.connect(database_url, sslmode="require")
+    else:
+        # Fallback to individual variables for local testing
+        conn = psycopg2.connect(
+            host=os.environ.get("DB_HOST", "localhost"),
+            database=os.environ.get("DB_NAME", "evently"),
+            user=os.environ.get("DB_USER", "evently_user"),
+            password=os.environ.get("DB_PASS", "evently_password"),
+            port=os.environ.get("DB_PORT", 5432)
+        )
+        return conn
 
 import json
 
