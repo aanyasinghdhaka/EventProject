@@ -239,7 +239,12 @@ document.getElementById('switch-mode-btn').addEventListener('click', () => {
     if (isAdmin) {
         showUserMode();
     } else {
-        showAdminMode();
+        const password = prompt("Enter admin password:");
+        if (password === "eventlyadmin") {
+            showAdminMode();
+        } else if (password !== null) {
+            alert("Incorrect password.");
+        }
     }
 });
 
