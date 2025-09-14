@@ -467,4 +467,5 @@ def create_event_secure():
 
 # This runs the app on your computer
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))  # default to 10000 for your service
+    app.run(host="0.0.0.0", port=port, debug=True)
