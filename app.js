@@ -7,7 +7,7 @@ let isAdmin = false;
 let selectedEventId = null;
 let selectedSeatNumbers = [];
 
-// --- Element References (Moved to top for clarity) ---
+// --- Element References ---
 const seatModal = document.getElementById('seat-modal');
 const closeModalButton = document.querySelector('.close-button');
 const modalEventName = document.getElementById('modal-event-name');
@@ -73,11 +73,14 @@ function showAdminMode() {
 }
 
 // --- Seat Modal Functions ---
-
 function openSeatModal(eventId, eventName) {
     selectedEventId = eventId;
     selectedSeatNumbers = [];
     modalEventName.textContent = eventName;
+    
+    // Attach event listener when the modal is opened
+    confirmSeatBookingBtn.addEventListener('click', bookSelectedSeats);
+
     confirmSeatBookingBtn.style.display = 'none';
     fetchAndRenderSeats(eventId);
     seatModal.style.display = 'block';
@@ -243,7 +246,7 @@ function createEvent(eventData) {
 }
 
 // --- Event Listeners ---
-// Moved to the bottom to ensure all elements are in the DOM
+// The following event listeners were already fine, as their elements are always present on the page.
 document.getElementById('user-search-button').addEventListener('click', () => {
     const searchTerm = document.getElementById('user-search-input').value;
     fetchEvents(searchTerm);
@@ -271,8 +274,6 @@ window.addEventListener('click', (event) => {
         closeSeatModal();
     }
 });
-
-confirmSeatBookingBtn.addEventListener('click', bookSelectedSeats);
 
 document.getElementById('switch-mode-btn').addEventListener('click', () => {
     if (isAdmin) {
