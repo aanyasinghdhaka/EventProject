@@ -451,18 +451,9 @@ def create_user():
         return {"error": str(e)}, 500
     finally:
         if conn: conn.close()
-# A simple check to protect admin routes
-def is_admin(api_key):
-    # This is a very simple check. A real app would use a database and tokens.
-    return api_key == 'super_secret_admin_key'
 
-# Example of how to use it
-@app.route('/admin/events', methods=['POST'])
-def create_event_secure():
-    api_key = request.headers.get('X-API-Key')
-    if not is_admin(api_key):
-        return {"error": "Unauthorized"}, 401
-    
+
+
     # The rest of your existing create_event code goes here...
 from flask import Flask, render_template
 
