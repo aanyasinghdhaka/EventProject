@@ -1,4 +1,3 @@
-
 const userId = 1;
 const backendBase = "https://asd-evently-backend.onrender.com";
 const userBackendUrl = `${backendBase}/events`;
@@ -228,14 +227,7 @@ function generateSeats(eventId) {
     }
 }
 
-function checkAdminPassword() {
-    const password = prompt("Enter admin password:");
-    if (password === "eventlyadmin") {
-        showAdminMode(); // unlock admin UI
-    } else {
-        alert("Wrong password!");
-    }
-}
+
 
 
 // --- Event Listeners ---
@@ -243,19 +235,6 @@ function checkAdminPassword() {
 document.getElementById('user-search-button').addEventListener('click', () => {
     const searchTerm = document.getElementById('user-search-input').value;
     fetchEvents(searchTerm);
-});
-
-document.getElementById('switch-mode-btn').addEventListener('click', () => {
-    if (isAdmin) {
-        showUserMode();
-    } else {
-        const password = prompt("Enter admin password:");
-        if (password === "eventlyadmin") {
-            showAdminMode();
-        } else if (password !== null) {
-            alert("Incorrect password.");
-        }
-    }
 });
 
 
@@ -297,6 +276,18 @@ window.addEventListener('click', (event) => {
 
 confirmSeatBookingBtn.addEventListener('click', bookSelectedSeats);
 
+document.getElementById('switch-mode-btn').addEventListener('click', () => {
+    if (isAdmin) {
+        showUserMode();
+    } else {
+        const password = prompt("Enter admin password:");
+        if (password === "eventlyadmin") {
+            showAdminMode();
+        } else if (password !== null) {
+            alert("Incorrect password.");
+        }
+    }
+});
 
 // Initial load
 showUserMode();
